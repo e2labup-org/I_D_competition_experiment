@@ -30,9 +30,7 @@ class ResultsWaitPage2(WaitPage):
 
 class ShuffleWaitPage(WaitPage):
     wait_for_all_groups=True
-    def after_all_players_arrive(subsession):
-        subsession.group_randomly(fixed_id_in_group=True) #manten el id aun después del shuffle
-
+    after_all_players_arrive='creating_session'
 
 
 class Decision_segundaetapa(Page):
