@@ -43,6 +43,10 @@ class Group(BaseGroup):
     unit_price=models.CurrencyField()
 
     def set_payoffs(self):
+        """
+        Función para obtener las ganancias en cada ronda y asignarle a cada jugador su gannacia.
+        Se hallan las unidades totales entre players de la ronda, para así hallar un precio por el producto.
+        """
         players = self.get_players()
         self.total_units = sum([p.units for p in players])
         self.unit_price = Constants.total_capacity - self.total_units
@@ -81,13 +85,12 @@ class Player(BasePlayer):
     )
 
     pregunta2=models.IntegerField(label="""
-    En la primera etapa inviertes 3 unidades, en la segunda etapa
-    eliges una cantidad de 10, mientras que el otro jugador elige 4.
+    En la segunda etapa eliges una cantidad de 10, mientras que el otro jugador elige 4.
     ¿Cuánto es tu precio?
     """)
 
     pregunta3=models.IntegerField(label="""
-    En la primera etapa inviertes 6, en la segunda etapa eliges una
+    En la segunda etapa eliges una
     cantidad de 3, mientras que el otro jugador elige 4.
     ¿Cuánto es tu precio?
     """)
@@ -95,14 +98,10 @@ class Player(BasePlayer):
     pregunta4=models.IntegerField(label="""
     En la primera etapa inviertes 8, en la segunda etapa eliges una
     cantidad de 7, mientras que el otro jugador elige 9.
-    ¿Cuánto es tu precio?    
+    ¿Cuánto es tu ganancia?    
     """)
 
     pregunta5=models.BooleanField(label="""
     En cualquiera de los periodos, dada una cantidad del otro jugador,
     si eliges mayor cantidad para producir, tu precio es menor
     """)
-    
-    
-
-  

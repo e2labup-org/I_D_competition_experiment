@@ -11,6 +11,19 @@ class Control_lectura(Page):
     def is_displayed(self):
         return self.round_number == 1
     
+    def error_message(self,values):
+        print('values is',values)
+        if values["pregunta1"] != 6:
+            return 'Esa no es la respuesta. Inténtelo de nuevo, por favor.'
+        if values['pregunta2'] != 56:
+            return 'Esa no es la respuesta. Inténtelo de nuevo, por favor.'
+        if values['pregunta3'] != 54:
+            return 'Esa no es la respuesta. Inténtelo de nuevo, por favor.'
+        if values['pregunta4'] != 90:
+            return 'Esa no es la respuesta. Inténtelo de nuevo, por favor.'
+        if values['pregunta5'] != True:
+            return 'Esa no es la respuesta. Inténtelo de nuevo, por favor.'
+    
     
 
     form_model='player'
