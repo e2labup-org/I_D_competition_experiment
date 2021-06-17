@@ -17,17 +17,17 @@ class Constants(BaseConstants):
     max_units_per_player=10
     instructions_template = 'innovation_game/instrucciones.html'
 
-    # Total production capacity of all players
-    total_capacity = 70
+    
+    total_capacity = 70 #precio máximo del producto
     #max_units_per_player = int(total_capacity / players_per_group)
     max_investment=8
     max_units_cost=20
-    k=1.5
+    k=1.5 #un parámetro para la inversión
 
 
 class Subsession(BaseSubsession):
     def creating_session(self):
-        self.group_randomly(fixed_id_in_group=True)
+        self.group_randomly()
 
 
 class Group(BaseGroup):
