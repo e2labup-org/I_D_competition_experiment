@@ -7,17 +7,10 @@
 
 {% block content %}
 
-    {% if {{player.stage}}==1 %}
+    {% formfields %}
 
-        {% formfield player.units %}
-    
-    {% else %}
-
-        {% formfield player.inversion %}
-    
-    {% endif %}    
     {% next_button %}
-
+  
     {% include Constants.instructions_template %}
 
 {% endblock %}

@@ -1,0 +1,105 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+    Resultados
+{% endblock %}
+
+{% block content %}
+
+        {% if stages == 1 %}
+
+            <p>Los resultados están en la siguiente tabla.</p>
+
+            <table class="table">
+
+                <tr>
+                    <td>Tu firma eligió:</td>
+                    <td>{{player.inversion}} unidades de inversion</td>
+                </tr>
+
+                {% if treatment == 1 or treatment == 3 %}
+                    <tr>
+                        <td>El promedio de la elección de las otras firmas es:</td>
+                        <td>{{other_player_inversion}} unidades de inversion</td>
+                    </tr>
+
+                {% elif treatment == 0 or treatment == 2 %}
+
+                    <tr>
+                        <td>La otra firma eligió:</td>
+                        <td>{{other_player_inversion}} unidades de inversion</td>
+                    </tr>
+
+                {% endif %}
+
+                {% if treatment == 2 or treatment == 3 %}    
+                    <tr>
+                        <td style="border-top-width:4px"> Costo de inversión:</td>
+                        <td style="border-top-width:4px">{{investment_cost}}</td>
+                    </tr>
+            </table>
+
+                {% elif treatment == 0 or treatment == 1 %}    
+                    <tr>
+                        <td style="border-top-width:4px"> Beneficios de la ronda:</td>
+                        <td style="border-top-width:4px">{{ player.payoff }}</td>
+                    </tr>
+
+            </table>
+
+                {% endif %}
+
+        {% elif stages == 2 %}
+
+            <p>Los resultados están en la siguiente tabla:</p>
+
+            <table class="table">   
+
+                <tr>
+                    <td>Tu empresa produció:</td>
+                    <td>{{ player.units }} unidades</td>
+                </tr>
+
+                {% if treatment == 1 or treatment == 3 %}
+
+                    <tr>
+                        <td>La otra empresa produjo:</td>
+                        <td>{{ other_player_units }} unidades</td>
+                    </tr>
+                
+                {% elif treatment == 0 or treatment == 2 %}
+
+                    <tr>
+                        <td>Las otras empresas producieron en promedio:</td>
+                        <td>{{ other_player_units }} unidades</td>
+                    </tr>
+                
+                {% endif %}
+
+                <tr>
+                    <td>Producción total:</td>
+                    <td>{{ group.total_units }} unidades</td>
+                </tr>
+
+                <tr>
+                    <td style="border-top-width:4px">Precio por unidad:</td>
+                    <td style="border-top-width:4px">{{ Constants.total_capacity }} – {{ group.total_units }} = {{ group.unit_price }}</td>
+                </tr>
+
+                <tr>
+                    <td>Tu ganancia:</td>
+                    <td>{{ player.payoff }}</td>
+                </tr>
+
+            </table>
+    
+
+        {% endif %}
+
+
+    {% next_button %}
+
+    {% include Constants.instructions_template %}
+
+{% endblock %}

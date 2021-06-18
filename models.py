@@ -10,6 +10,7 @@ from otree.api import (
 )
 
 
+
 class Constants(BaseConstants):
     name_in_url = 'innovation_game'
     #players_per_group = None
@@ -17,8 +18,8 @@ class Constants(BaseConstants):
     num_rounds = 2
     max_units_per_player=10
     instructions_template = 'innovation_game/instrucciones.html'
-    
-    
+    alpha=30
+    players_per_group=4
     total_capacity = 70 #precio máximo del producto
     #max_units_per_player = int(total_capacity / players_per_group)
     max_investment=8
@@ -32,34 +33,49 @@ class Subsession(BaseSubsession):
 
 
 class Group(BaseGroup):
-
-   
-    #def set_investment(self):
-    #    players=self.get_players()
-    #    for p in players:
-    #     Player.investment_cost=Constants.k*Player.inversion
-
-    total_units = models.IntegerField(doc="""Total units produced by all players""")
+    total_units = models.IntegerField(doc="""Total de unidades producidas por todos los jugadores""")
 
     unit_price=models.CurrencyField()
+
+    total_inversion = models.IntegerField(doc="""Total de inversión por todos los jugadores""")
+
+
 
     def set_payoffs(self):
         """
         Función para obtener las ganancias en cada ronda y asignarle a cada jugador su beneficio propio de la ronda.
         Se hallan las unidades totales entre players de la ronda, para así hallar un precio por el producto.
         """
-        players = self.get_players()
-        self.total_units = sum([p.units for p in players])
-        self.unit_price = Constants.total_capacity - self.total_units
-        for p in players:
-            p.payoff = self.unit_price * p.units
+        stages=self.session.config['stages']
+        total_players=Constants.players_per_group
+        players=self.get_players()
+        
 
-    
+        if stages==2:
 
+                self.total_units = sum([p.units for p in players])
+                self.unit_price = Constants.total_capacity - self.total_units
+                for p in players:
+                    p.payoff = (self.unit_price-Constants.max_units_cost+p.inversion) * p.units - p.inversion*p.inversion*Constants.k
+           
+        elif stages==1:
+                
+                self.total_inversion=sum([p.inversion for p in players])
+                for p in players:
+                    if total_players==2:
+                        p.payoff=25*(Constants.alpha+total_players*p.inversion+p.inversion-self.total_inversion)*(Constants.alpha+total_players*p.inversion+p.inversion-self.total_inversion)-225*Constants.k*p.inversion*p.inversion
+                    if total_players==4:
+                        p.payoff=9*(Constants.alpha+total_players*p.inversion+p.inversion-self.total_inversion)*(Constants.alpha+total_players*p.inversion+p.inversion-self.total_inversion)-225*Constants.k*p.inversion*p.inversion
+
+            
 
 class Player(BasePlayer):
+    total_units = models.IntegerField(doc="""Total de unidades producidas por todos los jugadores""")
+    total_inversion = models.IntegerField(doc="""Total de unidades invertidas por todos los jugadores""")
+    unit_price=models.CurrencyField()
 
     inversion = models.IntegerField(
+        initial=0,
         min=0,
         max=Constants.max_investment,
         label="¿Cuánto deseas invertir?",
@@ -67,6 +83,7 @@ class Player(BasePlayer):
     )
 
     units = models.IntegerField(
+        initial=0,
         min=0,
         max=Constants.max_units_per_player,
         doc="""Cantidad de unidades para producir""",
@@ -75,13 +92,46 @@ class Player(BasePlayer):
 
     def other_player(self):
         return self.get_others_in_group()[0]
-
-    stage=models.IntegerField(
+    
+    stage = models.IntegerField(
         initial=0,
-        min=0,
-        max=2,
-        doc="""Stage en el que está el player en el momento"""
+        min=0
     )
+
+    def other_player_sum_inversion(self):
+        others=self.get_others_in_group()
+        sum_others_inversion=[]
+        for p in others:
+            inversion=p.inversion
+            sum_others_inversion.append(inversion)
+        
+        sum_other_inversion=round(sum(sum_others_inversion))
+        return sum_other_inversion
+    
+    def other_player_sum_units(self):
+        others=self.get_others_in_group()
+        sum_others_units=[]
+        for p in others:
+            inversion=p.inversion
+            sum_others_units.append(inversion)
+        
+        sum_other_units=round(sum(sum_others_units))
+        return sum_other_units
+    
+    def set_payoffs_for_4_players(self):
+        stages=self.session.config['stages']
+        sum_inversion=self.other_player_sum_inversion()
+        players=Constants.players_per_group
+        self.total_inversion=players*sum_inversion+self.inversion
+        sum_units=self.other_player_sum_units()
+        self.total_units=players*sum_units+self.units
+        if stages==2:
+            self.unit_price = Constants.total_capacity - self.total_units
+            self.payoff = (self.unit_price-Constants.max_units_cost+self.inversion) * self.units - self.inversion*self.inversion*Constants.k
+           
+        elif stages==1:
+            self.payoff=9*(Constants.alpha+players*self.inversion+self.inversion-self.total_inversion)*(Constants.alpha+players*self.inversion+self.inversion-self.total_inversion)-225*Constants.k*self.inversion*self.inversion
+
 
     """
     Variables para el survey:

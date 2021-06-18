@@ -8,16 +8,16 @@
     </h3>
 
     <p>
-        Formarás parte de un experimento, el cual presenta {{Constants.num_rounds}} periodos.
-        Son un grupo de {{Constants.players_per_group}} participantes.
+        Formarás parte de un experimento, el cual presenta {{ Constants.num_rounds }} periodos.
+        Son un grupo de {{ Constants.players_per_group }} participantes.
         Después de cada periodo se te asignará aleatoriamente en otro grupo. 
         No podrás interactuar con ninguno de los otros participantes dentro de tu 
         grupo ni fuera de tu grupo.
 
 
-  {%if treatment==3 or treatment==4 %} 
+  {% if treatment == 3 or treatment == 4 %} 
 
-        <b>Cada periodo presenta {{stages}} etapas .</b> Las decisiones de la primera etapa son las "inversiones",
+        <b>Cada periodo presenta {{ stages }} etapas .</b> Las decisiones de la primera etapa son las "inversiones",
         mientras que las decisiones de la segunda etapa son las "cantidades" a producir.
         En los  siguientes párrafos se explicará qué se hará en cada etapa.
     </p>
@@ -26,8 +26,8 @@
         <b>Etapa 1:</b>
         Los participantes deciden simultáneamente e independientemente cuántas unidades fabricar. Además,
         venden el mismo producto en el mercado. La producción de una unidad de cada producto tiene un costo
-        denominado <b>costo unitario</b> y el costo es de {{Constants.max_units_cost}}. 
-        Puedes invertir en esta etapa. Sus opciones son cualquier número desde 0 hasta {{Constants.max_investment}}.
+        denominado <b>costo unitario</b> y el costo es de {{ Constants.max_units_cost }}. 
+        Puedes invertir en esta etapa. Sus opciones son cualquier número desde 0 hasta {{ Constants.max_investment }}.
         Al invertir reduces el costo unitario. El siguiente cuadro muestra la relación entre inversión y los costos unitarios:
         Adicionalmente, existe un costo de inversión, el cual está expresado en la tabla de costos posterior.
     </p>
@@ -144,7 +144,7 @@
 
     <p>
         <b>Etapa 2:</b>
-        En esta segunda etapa cada participante elige la cantidad que deseas vender. Sus opciones son cualquiera entre 0 y {{Constants.max_units_per_player}}.
+        En esta segunda etapa cada participante elige la cantidad que deseas vender. Sus opciones son cualquiera entre 0 y {{ Constants.max_units_per_player }}.
         La decisión de el otro participante influye en tu propio precio de forma negativa. A mayor cantidad elegida 
         por el otro participante, menor precio de tu producto. 
         La influencia entre las cantidades elegidas y tu propio precio están en la siguiente tabla:        
@@ -362,11 +362,12 @@
     <p>
         <b>Decisión en cada periodo:</b>
         Los participantes deciden simultáneamente e independientemente cuántas unidades fabricar. Además,
-        venden el mismo producto en el mercado. Adicionalmente, existe la opción de invertir. Sus opciones son cualquier número desde 0 hasta {{Constants.max_investment}}.
+        venden el mismo producto en el mercado. Adicionalmente, existe la opción de invertir. Sus opciones son cualquier número desde 0 hasta {{ Constants.max_investment }}.
         Considera que las inversiones por arriba de 0 cuestan. El siguiente cuadro muestra la relación entre inversión y los costos unitarios:
         Las inversiones son útiles puesto que aumentan tus ganancias. Puedes observar la relación entre ambos en el segundo cuadro. Las filas contienen tus posibles niveles
         de inversión y las columnas las posibles inversiones de los otros participantes de tu grupo.
     </p>
+
     <p>
       <style type="text/css">
         .tg  {border-collapse:collapse;border-spacing:0;}
@@ -407,8 +408,8 @@
           </tr>
         </tbody>
         </table>
-
     </p>
+    
     <p>
       <style type="text/css">
         .tg  {border-collapse:collapse;border-spacing:0;}
@@ -566,7 +567,7 @@
 
   {% endif %}
     <p>
-        <b>Después de los {{Constans.num_rounds}} periodos</b>: tu y los otros participantes empiezan con el mismo nivel de endowment.
+        <b>Después de los {{ Constants.num_rounds }} periodos</b>: tu y los otros participantes empiezan con el mismo nivel de endowment.
         Las cantidades elegidas determinan las ganancias en cada periodo, las cuales pueden ser negativas o positivas. La cantidad total 
         de ganancia del experimento es la suma de tu endowment y todos los beneficios de cada ronda:
         <b>Ganancias totales=endowment+total de beneficios</b>
