@@ -2,13 +2,20 @@
 {% load otree %}
 
 {% block title %}
-    Inversión
+    Decision
 {% endblock %}
 
 {% block content %}
 
-    {% formfields %}
+    {% if {{player.stage}}==1 %}
 
+        {% formfield player.units %}
+    
+    {% else %}
+
+        {% formfield player.inversion %}
+    
+    {% endif %}    
     {% next_button %}
 
     {% include Constants.instructions_template %}

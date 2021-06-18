@@ -12,11 +12,12 @@ from otree.api import (
 
 class Constants(BaseConstants):
     name_in_url = 'innovation_game'
-    players_per_group = 2
+    #players_per_group = None
+    #stages=2
     num_rounds = 2
     max_units_per_player=10
     instructions_template = 'innovation_game/instrucciones.html'
-
+    
     
     total_capacity = 70 #precio máximo del producto
     #max_units_per_player = int(total_capacity / players_per_group)
@@ -44,7 +45,7 @@ class Group(BaseGroup):
 
     def set_payoffs(self):
         """
-        Función para obtener las ganancias en cada ronda y asignarle a cada jugador su gannacia.
+        Función para obtener las ganancias en cada ronda y asignarle a cada jugador su beneficio propio de la ronda.
         Se hallan las unidades totales entre players de la ronda, para así hallar un precio por el producto.
         """
         players = self.get_players()
@@ -75,6 +76,12 @@ class Player(BasePlayer):
     def other_player(self):
         return self.get_others_in_group()[0]
 
+    stage=models.IntegerField(
+        initial=0,
+        min=0,
+        max=2,
+        doc="""Stage en el que está el player en el momento"""
+    )
 
     """
     Variables para el survey:
