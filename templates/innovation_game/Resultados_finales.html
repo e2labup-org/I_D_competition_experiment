@@ -1,0 +1,25 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block title %}
+    Resultados finales
+{% endblock %}
+
+{% block content %}
+
+    <p>El resultado final de todos las rondas es el siguiente:</p>
+
+    <table class="table">
+
+        <tr>
+            <td>Tu ganancia total:</td>
+            <td>{{ player.participant.payoff }}</td>
+        </tr>
+
+    </table>
+
+    {% next_button %}
+
+    {% include Constants.instructions_template %}
+
+{% endblock %}

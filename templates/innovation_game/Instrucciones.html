@@ -1,0 +1,581 @@
+{% load otree %}
+
+<div class="card bg-light m-3">
+    <div class="card-body">
+
+    <h3>
+        Instrucciones
+    </h3>
+
+    <p>
+        Formarás parte de un experimento, el cual presenta {{ Constants.num_rounds }} periodos.
+        Son un grupo de {{ Constants.players_per_group }} participantes.
+        Después de cada periodo se te asignará aleatoriamente en otro grupo. 
+        No podrás interactuar con ninguno de los otros participantes dentro de tu 
+        grupo ni fuera de tu grupo.
+
+
+  {% if treatment == 3 or treatment == 4 %} 
+
+        <b>Cada periodo presenta {{ stages }} etapas .</b> Las decisiones de la primera etapa son las "inversiones",
+        mientras que las decisiones de la segunda etapa son las "cantidades" a producir.
+        En los  siguientes párrafos se explicará qué se hará en cada etapa.
+    </p>
+
+    <p>
+        <b>Etapa 1:</b>
+        Los participantes deciden simultáneamente e independientemente cuántas unidades fabricar. Además,
+        venden el mismo producto en el mercado. La producción de una unidad de cada producto tiene un costo
+        denominado <b>costo unitario</b> y el costo es de {{ Constants.max_units_cost }}. 
+        Puedes invertir en esta etapa. Sus opciones son cualquier número desde 0 hasta {{ Constants.max_investment }}.
+        Al invertir reduces el costo unitario. El siguiente cuadro muestra la relación entre inversión y los costos unitarios:
+        Adicionalmente, existe un costo de inversión, el cual está expresado en la tabla de costos posterior.
+    </p>
+    <p>
+      <style type="text/css">
+        .tg  {border-collapse:collapse;border-spacing:0;}
+        .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+          overflow:hidden;padding:10px 5px;word-break:normal;}
+        .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+          font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+        .tg .tg-4bkr{background-color:#fe996b;text-align:center;vertical-align:middle}
+        .tg .tg-nrix{text-align:center;vertical-align:middle}
+        </style>
+        <table class="tg">
+        <thead>
+          <tr>
+            <th class="tg-4bkr">Costo unitario antes de<br>la primera etapa</th>
+            <th class="tg-4bkr">Inversión</th>
+            <th class="tg-4bkr">Costo unitario después de<br>la primera etapa</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tg-nrix">20</td>
+            <td class="tg-nrix">0</td>
+            <td class="tg-nrix">20</td>
+          </tr>
+          <tr>
+            <td class="tg-nrix">20</td>
+            <td class="tg-nrix">1</td>
+            <td class="tg-nrix">19</td>
+          </tr>
+          <tr>
+            <td class="tg-nrix">20</td>
+            <td class="tg-nrix">2</td>
+            <td class="tg-nrix">18</td>
+          </tr>
+          <tr>
+            <td class="tg-nrix">20</td>
+            <td class="tg-nrix">3</td>
+            <td class="tg-nrix">17</td>
+          </tr>
+          <tr>
+            <td class="tg-nrix">20</td>
+            <td class="tg-nrix">4</td>
+            <td class="tg-nrix">16</td>
+          </tr>
+          <tr>
+            <td class="tg-nrix">20</td>
+            <td class="tg-nrix">5</td>
+            <td class="tg-nrix">15</td>
+          </tr>
+          <tr>
+            <td class="tg-nrix">20</td>
+            <td class="tg-nrix">6</td>
+            <td class="tg-nrix">14</td>
+          </tr>
+          <tr>
+            <td class="tg-nrix">20</td>
+            <td class="tg-nrix">7</td>
+            <td class="tg-nrix">13</td>
+          </tr>
+          <tr>
+            <td class="tg-nrix">20</td>
+            <td class="tg-nrix">8</td>
+            <td class="tg-nrix">12</td>
+          </tr>
+        </tbody>
+        </table>
+    <p>
+      <style type="text/css">
+        .tg  {border-collapse:collapse;border-spacing:0;}
+        .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+          overflow:hidden;padding:5px 10px;word-break:normal;}
+        .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+          font-weight:normal;overflow:hidden;padding:5px 10px;word-break:normal;}
+        .tg .tg-4bkr{background-color:#fe996b;text-align:center;vertical-align:middle}
+        .tg .tg-nrix{text-align:center;vertical-align:middle}
+        </style>
+        <table class="tg">
+        <thead>
+          <tr>
+            <th class="tg-4bkr">Inversión</th>
+            <th class="tg-nrix">0</th>
+            <th class="tg-nrix">1</th>
+            <th class="tg-nrix">2</th>
+            <th class="tg-nrix">3</th>
+            <th class="tg-nrix">4</th>
+            <th class="tg-nrix">5</th>
+            <th class="tg-nrix">6</th>
+            <th class="tg-nrix">7</th>
+            <th class="tg-nrix">8</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tg-4bkr">Costo de inversión</td>
+            <td class="tg-nrix">0</td>
+            <td class="tg-nrix">1.5</td>
+            <td class="tg-nrix">3</td>
+            <td class="tg-nrix">4.5</td>
+            <td class="tg-nrix">6</td>
+            <td class="tg-nrix">7.5</td>
+            <td class="tg-nrix">9</td>
+            <td class="tg-nrix">10.5</td>
+            <td class="tg-nrix">12</td>
+          </tr>
+        </tbody>
+        </table>
+
+    </p>      
+
+
+
+    <p>
+        <b>Etapa 2:</b>
+        En esta segunda etapa cada participante elige la cantidad que deseas vender. Sus opciones son cualquiera entre 0 y {{ Constants.max_units_per_player }}.
+        La decisión de el otro participante influye en tu propio precio de forma negativa. A mayor cantidad elegida 
+        por el otro participante, menor precio de tu producto. 
+        La influencia entre las cantidades elegidas y tu propio precio están en la siguiente tabla:        
+    </p>
+    <p>
+      <style type="text/css">
+        .tg  {border-collapse:collapse;border-spacing:0;}
+        .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+          overflow:hidden;padding:10px 5px;word-break:normal;}
+        .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+          font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+        .tg .tg-hy4i{background-color:#9aff99;text-align:center;vertical-align:middle}
+        .tg .tg-pw5p{background-color:#9aff99;font-weight:bold;text-align:center;vertical-align:top}
+        .tg .tg-baqh{text-align:center;vertical-align:top}
+        .tg .tg-djtu{background-color:#f8a102;text-align:center;vertical-align:middle}
+        .tg .tg-s6r5{background-color:#f8a102;font-weight:bold;text-align:center;vertical-align:middle}
+        .tg .tg-0qrx{background-color:#9aff99;font-weight:bold;text-align:center;vertical-align:middle}
+        .tg .tg-nrix{text-align:center;vertical-align:middle}
+        </style>
+        <table class="tg">
+        <thead>
+          <tr>
+            <th class="tg-djtu"></th>
+            <th class="tg-s6r5" colspan="12">Cantidad del otro jugador</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tg-s6r5" rowspan="12">Cantidad propia</td>
+            <td class="tg-hy4i"></td>
+            <td class="tg-0qrx">0</td>
+            <td class="tg-0qrx">1</td>
+            <td class="tg-0qrx">2</td>
+            <td class="tg-0qrx">3</td>
+            <td class="tg-0qrx">4</td>
+            <td class="tg-0qrx">5</td>
+            <td class="tg-0qrx">6</td>
+            <td class="tg-0qrx">7</td>
+            <td class="tg-0qrx">8</td>
+            <td class="tg-0qrx">9</td>
+            <td class="tg-0qrx">10</td>
+          </tr>
+          <tr>
+            <td class="tg-0qrx">0</td>
+            <td class="tg-nrix">70</td>
+            <td class="tg-nrix">69</td>
+            <td class="tg-nrix">68</td>
+            <td class="tg-nrix">67</td>
+            <td class="tg-nrix">66</td>
+            <td class="tg-nrix">65</td>
+            <td class="tg-nrix">64</td>
+            <td class="tg-nrix">63</td>
+            <td class="tg-nrix">62</td>
+            <td class="tg-nrix">61</td>
+            <td class="tg-nrix">60</td>
+          </tr>
+          <tr>
+            <td class="tg-0qrx">1</td>
+            <td class="tg-nrix">69</td>
+            <td class="tg-nrix">68</td>
+            <td class="tg-nrix">67</td>
+            <td class="tg-nrix">66</td>
+            <td class="tg-nrix">65</td>
+            <td class="tg-nrix">64</td>
+            <td class="tg-nrix">63</td>
+            <td class="tg-nrix">62</td>
+            <td class="tg-nrix">61</td>
+            <td class="tg-nrix">60</td>
+            <td class="tg-nrix">59</td>
+          </tr>
+          <tr>
+            <td class="tg-0qrx">2</td>
+            <td class="tg-nrix">68</td>
+            <td class="tg-nrix">67</td>
+            <td class="tg-nrix">66</td>
+            <td class="tg-nrix">65</td>
+            <td class="tg-nrix">64</td>
+            <td class="tg-nrix">63</td>
+            <td class="tg-nrix">62</td>
+            <td class="tg-nrix">61</td>
+            <td class="tg-nrix">60</td>
+            <td class="tg-nrix">59</td>
+            <td class="tg-nrix">58</td>
+          </tr>
+          <tr>
+            <td class="tg-0qrx">3</td>
+            <td class="tg-nrix">67</td>
+            <td class="tg-nrix">66</td>
+            <td class="tg-nrix">65</td>
+            <td class="tg-nrix">64</td>
+            <td class="tg-nrix">63</td>
+            <td class="tg-nrix">62</td>
+            <td class="tg-nrix">61</td>
+            <td class="tg-nrix">60</td>
+            <td class="tg-nrix">59</td>
+            <td class="tg-nrix">58</td>
+            <td class="tg-nrix">57</td>
+          </tr>
+          <tr>
+            <td class="tg-0qrx">4</td>
+            <td class="tg-nrix">66</td>
+            <td class="tg-nrix">65</td>
+            <td class="tg-nrix">64</td>
+            <td class="tg-nrix">63</td>
+            <td class="tg-nrix">62</td>
+            <td class="tg-nrix">61</td>
+            <td class="tg-nrix">60</td>
+            <td class="tg-nrix">59</td>
+            <td class="tg-nrix">58</td>
+            <td class="tg-nrix">57</td>
+            <td class="tg-nrix">56</td>
+          </tr>
+          <tr>
+            <td class="tg-0qrx">5</td>
+            <td class="tg-nrix">65</td>
+            <td class="tg-nrix">64</td>
+            <td class="tg-nrix">63</td>
+            <td class="tg-nrix">62</td>
+            <td class="tg-nrix">61</td>
+            <td class="tg-nrix">60</td>
+            <td class="tg-nrix">59</td>
+            <td class="tg-nrix">58</td>
+            <td class="tg-nrix">57</td>
+            <td class="tg-nrix">56</td>
+            <td class="tg-nrix">55</td>
+          </tr>
+          <tr>
+            <td class="tg-0qrx">6</td>
+            <td class="tg-nrix">64</td>
+            <td class="tg-nrix">63</td>
+            <td class="tg-nrix">62</td>
+            <td class="tg-nrix">61</td>
+            <td class="tg-nrix">60</td>
+            <td class="tg-nrix">59</td>
+            <td class="tg-nrix">58</td>
+            <td class="tg-nrix">57</td>
+            <td class="tg-nrix">56</td>
+            <td class="tg-nrix">55</td>
+            <td class="tg-nrix">54</td>
+          </tr>
+          <tr>
+            <td class="tg-0qrx">7</td>
+            <td class="tg-nrix">63</td>
+            <td class="tg-nrix">62</td>
+            <td class="tg-nrix">61</td>
+            <td class="tg-nrix">60</td>
+            <td class="tg-nrix">59</td>
+            <td class="tg-nrix">58</td>
+            <td class="tg-nrix">57</td>
+            <td class="tg-nrix">56</td>
+            <td class="tg-nrix">55</td>
+            <td class="tg-nrix">54</td>
+            <td class="tg-nrix">53</td>
+          </tr>
+          <tr>
+            <td class="tg-0qrx">8</td>
+            <td class="tg-nrix">62</td>
+            <td class="tg-nrix">61</td>
+            <td class="tg-nrix">60</td>
+            <td class="tg-nrix">59</td>
+            <td class="tg-nrix">58</td>
+            <td class="tg-nrix">57</td>
+            <td class="tg-nrix">56</td>
+            <td class="tg-nrix">55</td>
+            <td class="tg-nrix">54</td>
+            <td class="tg-nrix">53</td>
+            <td class="tg-nrix">52</td>
+          </tr>
+          <tr>
+            <td class="tg-0qrx">9</td>
+            <td class="tg-nrix">61</td>
+            <td class="tg-nrix">60</td>
+            <td class="tg-nrix">59</td>
+            <td class="tg-nrix">58</td>
+            <td class="tg-nrix">57</td>
+            <td class="tg-nrix">56</td>
+            <td class="tg-nrix">55</td>
+            <td class="tg-nrix">54</td>
+            <td class="tg-nrix">53</td>
+            <td class="tg-nrix">52</td>
+            <td class="tg-nrix">51</td>
+          </tr>
+          <tr>
+            <td class="tg-pw5p">10</td>
+            <td class="tg-baqh">60</td>
+            <td class="tg-baqh">59</td>
+            <td class="tg-baqh">58</td>
+            <td class="tg-baqh">57</td>
+            <td class="tg-baqh">56</td>
+            <td class="tg-baqh">55</td>
+            <td class="tg-baqh">54</td>
+            <td class="tg-baqh">53</td>
+            <td class="tg-baqh">52</td>
+            <td class="tg-baqh">51</td>
+            <td class="tg-baqh">50</td>
+          </tr>
+        </tbody>
+        </table>
+    </p>
+    <p>
+        En las filas están tus posibles cantidades, mientras que en las columnas el del otro participante (o el promedio de los otros participantes).
+        Por ejemplo, si eliges 5 y el otro participante 7, tu precio será de 58 en ese periodo.
+    </p>
+    <p>
+        <b>Ganancia de cada periodo:</b>
+        Está determinada por tu nivel de inversión, de cantidad y la cantidad del otro participante. 
+        Esta definido como:
+    </p>
+    <p>
+        <b>Beneficios=(precio-costo unitario después de la primera etapa)*cantidad elegida-costos de inversión</b>
+    </p>
+
+  {% elif treatment == 0 or treatment == 1 %}:
+    </p>
+    <p>
+        <b>Decisión en cada periodo:</b>
+        Los participantes deciden simultáneamente e independientemente cuántas unidades fabricar. Además,
+        venden el mismo producto en el mercado. Adicionalmente, existe la opción de invertir. Sus opciones son cualquier número desde 0 hasta {{ Constants.max_investment }}.
+        Considera que las inversiones por arriba de 0 cuestan. El siguiente cuadro muestra la relación entre inversión y los costos unitarios:
+        Las inversiones son útiles puesto que aumentan tus ganancias. Puedes observar la relación entre ambos en el segundo cuadro. Las filas contienen tus posibles niveles
+        de inversión y las columnas las posibles inversiones de los otros participantes de tu grupo.
+    </p>
+
+    <p>
+      <style type="text/css">
+        .tg  {border-collapse:collapse;border-spacing:0;}
+        .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+          overflow:hidden;padding:5px 10px;word-break:normal;}
+        .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+          font-weight:normal;overflow:hidden;padding:5px 10px;word-break:normal;}
+        .tg .tg-4bkr{background-color:#fe996b;text-align:center;vertical-align:middle}
+        .tg .tg-nrix{text-align:center;vertical-align:middle}
+        </style>
+        <table class="tg">
+        <thead>
+          <tr>
+            <th class="tg-4bkr">Inversión</th>
+            <th class="tg-nrix">0</th>
+            <th class="tg-nrix">1</th>
+            <th class="tg-nrix">2</th>
+            <th class="tg-nrix">3</th>
+            <th class="tg-nrix">4</th>
+            <th class="tg-nrix">5</th>
+            <th class="tg-nrix">6</th>
+            <th class="tg-nrix">7</th>
+            <th class="tg-nrix">8</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tg-4bkr">Costo de inversión</td>
+            <td class="tg-nrix">0</td>
+            <td class="tg-nrix">1.5</td>
+            <td class="tg-nrix">3</td>
+            <td class="tg-nrix">4.5</td>
+            <td class="tg-nrix">6</td>
+            <td class="tg-nrix">7.5</td>
+            <td class="tg-nrix">9</td>
+            <td class="tg-nrix">10.5</td>
+            <td class="tg-nrix">12</td>
+          </tr>
+        </tbody>
+        </table>
+    </p>
+    
+    <p>
+      <style type="text/css">
+        .tg  {border-collapse:collapse;border-spacing:0;}
+        .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+          overflow:hidden;padding:10px 5px;word-break:normal;}
+        .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+          font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+        .tg .tg-hy4i{background-color:#9aff99;text-align:center;vertical-align:middle}
+        .tg .tg-pw5p{background-color:#9aff99;font-weight:bold;text-align:center;vertical-align:top}
+        .tg .tg-baqh{text-align:center;vertical-align:top}
+        .tg .tg-djtu{background-color:#f8a102;text-align:center;vertical-align:middle}
+        .tg .tg-s6r5{background-color:#f8a102;font-weight:bold;text-align:center;vertical-align:middle}
+        .tg .tg-0qrx{background-color:#9aff99;font-weight:bold;text-align:center;vertical-align:middle}
+        .tg .tg-nrix{text-align:center;vertical-align:middle}
+        </style>
+        <table class="tg">
+        <thead>
+          <tr>
+            <th class="tg-djtu"></th>
+            <th class="tg-s6r5" colspan="12">Inversión del otro jugador</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="tg-s6r5" rowspan="12">Inversión propia</td>
+            <td class="tg-hy4i"></td>
+            <td class="tg-0qrx">0</td>
+            <td class="tg-0qrx">1</td>
+            <td class="tg-0qrx">2</td>
+            <td class="tg-0qrx">3</td>
+            <td class="tg-0qrx">4</td>
+            <td class="tg-0qrx">5</td>
+            <td class="tg-0qrx">6</td>
+            <td class="tg-0qrx">7</td>
+            <td class="tg-0qrx">8</td>
+          </tr>
+          <tr>
+            <td class="tg-0qrx">0</td>
+            <td class="tg-nrix"></td>
+            <td class="tg-nrix"></td>
+            <td class="tg-nrix"></td>
+            <td class="tg-nrix"></td>
+            <td class="tg-nrix"></td>
+            <td class="tg-nrix"></td>
+            <td class="tg-nrix"></td>
+            <td class="tg-nrix"></td>
+            <td class="tg-nrix"></td>
+          </tr>
+          <tr>
+            <td class="tg-0qrx">1</td>
+            <td class="tg-nrix"></td>
+            <td class="tg-nrix"></td>
+            <td class="tg-nrix"></td>
+            <td class="tg-nrix"></td>
+            <td class="tg-nrix"></td>
+            <td class="tg-nrix"></td>
+            <td class="tg-nrix"></td>
+            <td class="tg-nrix"></td>
+            <td class="tg-nrix"></td>
+          </tr>
+          <tr>
+            <td class="tg-0qrx">2</td>
+            <td class="tg-nrix">68</td>
+            <td class="tg-nrix">67</td>
+            <td class="tg-nrix">66</td>
+            <td class="tg-nrix">65</td>
+            <td class="tg-nrix">64</td>
+            <td class="tg-nrix">63</td>
+            <td class="tg-nrix">62</td>
+            <td class="tg-nrix">61</td>
+            <td class="tg-nrix">60</td>
+          </tr>
+          <tr>
+            <td class="tg-0qrx">3</td>
+            <td class="tg-nrix">67</td>
+            <td class="tg-nrix">66</td>
+            <td class="tg-nrix">65</td>
+            <td class="tg-nrix">64</td>
+            <td class="tg-nrix">63</td>
+            <td class="tg-nrix">62</td>
+            <td class="tg-nrix">61</td>
+            <td class="tg-nrix">60</td>
+            <td class="tg-nrix">59</td>
+          </tr>
+          <tr>
+            <td class="tg-0qrx">4</td>
+            <td class="tg-nrix">66</td>
+            <td class="tg-nrix">65</td>
+            <td class="tg-nrix">64</td>
+            <td class="tg-nrix">63</td>
+            <td class="tg-nrix">62</td>
+            <td class="tg-nrix">61</td>
+            <td class="tg-nrix">60</td>
+            <td class="tg-nrix">59</td>
+            <td class="tg-nrix">58</td>
+          </tr>
+          <tr>
+            <td class="tg-0qrx">5</td>
+            <td class="tg-nrix">65</td>
+            <td class="tg-nrix">64</td>
+            <td class="tg-nrix">63</td>
+            <td class="tg-nrix">62</td>
+            <td class="tg-nrix">61</td>
+            <td class="tg-nrix">60</td>
+            <td class="tg-nrix">59</td>
+            <td class="tg-nrix">58</td>
+            <td class="tg-nrix">57</td>
+          </tr>
+          <tr>
+            <td class="tg-0qrx">6</td>
+            <td class="tg-nrix">64</td>
+            <td class="tg-nrix">63</td>
+            <td class="tg-nrix">62</td>
+            <td class="tg-nrix">61</td>
+            <td class="tg-nrix">60</td>
+            <td class="tg-nrix">59</td>
+            <td class="tg-nrix">58</td>
+            <td class="tg-nrix">57</td>
+            <td class="tg-nrix">56</td>
+          </tr>
+          <tr>
+            <td class="tg-0qrx">7</td>
+            <td class="tg-nrix">63</td>
+            <td class="tg-nrix">62</td>
+            <td class="tg-nrix">61</td>
+            <td class="tg-nrix">60</td>
+            <td class="tg-nrix">59</td>
+            <td class="tg-nrix">58</td>
+            <td class="tg-nrix">57</td>
+            <td class="tg-nrix">56</td>
+            <td class="tg-nrix">55</td>
+          </tr>
+          <tr>
+            <td class="tg-0qrx">8</td>
+            <td class="tg-nrix">62</td>
+            <td class="tg-nrix">61</td>
+            <td class="tg-nrix">60</td>
+            <td class="tg-nrix">59</td>
+            <td class="tg-nrix">58</td>
+            <td class="tg-nrix">57</td>
+            <td class="tg-nrix">56</td>
+            <td class="tg-nrix">55</td>
+            <td class="tg-nrix">54</td>
+          </tr>
+        </tbody>
+        </table>
+    </p>
+
+    <p>
+        <b>Ganancia de cada periodo:</b>
+        Está determinado por tu decisión de inversión y la de los otros participantes de tu grupo. Tus inversiones y
+        las inversiones de los otros participantes se determinan por medio de la tabla de ganancias. Así, tu ganancia se determina:
+        <b>Beneficios=ganancia de la ronda-costos de inversión</b>
+    </p>
+
+  {% endif %}
+    <p>
+        <b>Después de los {{ Constants.num_rounds }} periodos</b>: tu y los otros participantes empiezan con el mismo nivel de endowment.
+        Las cantidades elegidas determinan las ganancias en cada periodo, las cuales pueden ser negativas o positivas. La cantidad total 
+        de ganancia del experimento es la suma de tu endowment y todos los beneficios de cada ronda:
+        <b>Ganancias totales=endowment+total de beneficios</b>
+    </p>
+    
+      Antes de iniciar el juego se te hará una evaluación de 5 preguntas teóricas acerca del experimento. No podrás iniciar el experimento hasta
+      que respondas todas las preguntas correctamente. Las instrucciones estarán debajo con los cuadros respectivos para poder calcular las respuestas.
+    </p>
+    
+</div>
+</div>
