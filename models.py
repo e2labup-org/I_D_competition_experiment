@@ -19,7 +19,7 @@ class Constants(BaseConstants):
     max_units_per_player=10
     instructions_template = 'innovation_game/instrucciones.html'
     alpha=30
-    players_per_group=4
+    players_per_group=None
     total_capacity = 70 #precio máximo del producto
     #max_units_per_player = int(total_capacity / players_per_group)
     max_investment=8
@@ -28,8 +28,23 @@ class Constants(BaseConstants):
 
 
 class Subsession(BaseSubsession):
+    
     def creating_session(self):
+        players_p_group=self.session.config['players_p_group']
+        matriz=[]
+        players=self.get_players() #lista jugadores
+        numero_grupos=len(players)/players_p_group
+        i=0
+        for p in range(int(numero_grupos)):
+            matriz.append([])
+            for j in range(players_p_group):
+                matriz[p].append(players[i])
+                i=i+1
+
+        
+        self.set_group_matrix(matriz)
         self.group_randomly()
+        
 
 
 class Group(BaseGroup):
@@ -47,25 +62,29 @@ class Group(BaseGroup):
         Se hallan las unidades totales entre players de la ronda, para así hallar un precio por el producto.
         """
         stages=self.session.config['stages']
-        total_players=Constants.players_per_group
+        players_p_group=self.session.config['players_p_group']
         players=self.get_players()
         
 
-        if stages==2:
+        
+        for p in players:
+ 
 
-                self.total_units = sum([p.units for p in players])
+            if stages==2:
+                other_players_units=p.get_others_in_group()[0].units
+                units_otros=round(other_players_units/(len(players)-1))
+                self.total_units = units_otros+p.units
                 self.unit_price = Constants.total_capacity - self.total_units
-                for p in players:
-                    p.payoff = (self.unit_price-Constants.max_units_cost+p.inversion) * p.units - p.inversion*p.inversion*Constants.k
+                p.payoff = (self.unit_price-Constants.max_units_cost+p.inversion) * p.units - p.inversion*p.inversion*Constants.k
            
-        elif stages==1:
-                
-                self.total_inversion=sum([p.inversion for p in players])
-                for p in players:
-                    if total_players==2:
-                        p.payoff=25*(Constants.alpha+total_players*p.inversion+p.inversion-self.total_inversion)*(Constants.alpha+total_players*p.inversion+p.inversion-self.total_inversion)-225*Constants.k*p.inversion*p.inversion
-                    if total_players==4:
-                        p.payoff=9*(Constants.alpha+total_players*p.inversion+p.inversion-self.total_inversion)*(Constants.alpha+total_players*p.inversion+p.inversion-self.total_inversion)-225*Constants.k*p.inversion*p.inversion
+            elif stages==1:
+                other_players_inversion=p.get_others_in_group()[0].inversion #solo llama a 1 de los posibles 3
+                inversion_otros=round(other_players_inversion/(len(players)-1))
+                self.total_inversion=inversion_otros+p.inversion
+                if players_p_group==2:
+                    p.payoff=25*(Constants.alpha+players_p_group*p.inversion+p.inversion-self.total_inversion)*(Constants.alpha+players_p_group*p.inversion+p.inversion-self.total_inversion)-225*Constants.k*p.inversion*p.inversion
+                if players_p_group==4:
+                    p.payoff=9*(Constants.alpha+players_p_group*p.inversion+p.inversion-self.total_inversion)*(Constants.alpha+players_p_group*p.inversion+p.inversion-self.total_inversion)-225*Constants.k*p.inversion*p.inversion
 
             
 
@@ -97,41 +116,6 @@ class Player(BasePlayer):
         initial=0,
         min=0
     )
-
-    def other_player_sum_inversion(self):
-        others=self.get_others_in_group()
-        sum_others_inversion=[]
-        for p in others:
-            inversion=p.inversion
-            sum_others_inversion.append(inversion)
-        
-        sum_other_inversion=round(sum(sum_others_inversion))
-        return sum_other_inversion
-    
-    def other_player_sum_units(self):
-        others=self.get_others_in_group()
-        sum_others_units=[]
-        for p in others:
-            inversion=p.inversion
-            sum_others_units.append(inversion)
-        
-        sum_other_units=round(sum(sum_others_units))
-        return sum_other_units
-    
-    def set_payoffs_for_4_players(self):
-        stages=self.session.config['stages']
-        sum_inversion=self.other_player_sum_inversion()
-        players=Constants.players_per_group
-        self.total_inversion=players*sum_inversion+self.inversion
-        sum_units=self.other_player_sum_units()
-        self.total_units=players*sum_units+self.units
-        if stages==2:
-            self.unit_price = Constants.total_capacity - self.total_units
-            self.payoff = (self.unit_price-Constants.max_units_cost+self.inversion) * self.units - self.inversion*self.inversion*Constants.k
-           
-        elif stages==1:
-            self.payoff=9*(Constants.alpha+players*self.inversion+self.inversion-self.total_inversion)*(Constants.alpha+players*self.inversion+self.inversion-self.total_inversion)-225*Constants.k*self.inversion*self.inversion
-
 
     """
     Variables para el survey:
