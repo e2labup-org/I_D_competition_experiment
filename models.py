@@ -69,7 +69,7 @@ class Group(BaseGroup):
         
         for p in players:
  
-
+            #Para este punto hay que hacer un "for" que agregue c/u de los otros jugadores en una lista y hacer el average.
             if stages==2:
                 other_players_units=p.get_others_in_group()[0].units
                 units_otros=round(other_players_units/(len(players)-1))
